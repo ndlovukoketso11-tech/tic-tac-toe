@@ -30,7 +30,4 @@ Build for production:
 npm run build
 npm run preview
 ```
-
-Notes:
-- Loom video and deployment steps are left for you to complete (see assignment requirements).
 # tic-tac-toe
