@@ -1,22 +1,115 @@
-* { box-sizing: border-box; }
-body { font-family: Inter, system-ui, Arial, sans-serif; background:#f6f8fa; margin:0; padding:0; display:flex; min-height:100vh; align-items:center; justify-content:center; }
-.app { width:100%; max-width:900px; margin:24px; }
-h1 { text-align:center; margin-bottom:12px; }
-.game { display:flex; gap:24px; align-items:flex-start; justify-content:center; }
-.board { display:grid; grid-template-columns: repeat(3, 90px); grid-gap:8px; padding:12px; background: #fff; border-radius:8px; box-shadow: 0 6px 18px rgba(15,23,42,0.06); }
-.square { width:90px; height:90px; font-size:36px; font-weight:700; display:flex; align-items:center; justify-content:center; border:2px solid #e6e9ee; background:linear-gradient(180deg,#fff,#fbfdff); cursor:pointer; transition:transform .08s ease, background .08s ease; }
-.square:hover { transform: translateY(-4px); }
-.square.disabled { cursor:default; opacity:0.9; transform:none; }
-.sidebar { min-width:220px; }
-.status { font-weight:700; margin-bottom:12px; font-size:18px; }
-.controls { display:flex; gap:8px; margin-bottom:12px; }
-.controls button { padding:8px 12px; border-radius:6px; border:none; background:#0ea5a4; color:white; cursor:pointer; }
-.controls button:disabled { opacity:0.5; cursor:default; }
-.history { background:#fff; padding:10px; border-radius:8px; box-shadow: 0 6px 18px rgba(15,23,42,0.04); }
-.history ol { padding-left:16px; margin:0; }
-.history button { background:none; border:1px solid transparent; padding:6px 8px; border-radius:6px; cursor:pointer; }
-.history button.current { background:#eef2ff; border-color:#c7baff; }
-.footer { text-align:center; margin-top:14px; color:#6b7280; }
+* { 
+    box-sizing:border-box; 
+}
+body {
+     font-family: Inter, system-ui Arial, sans-serif; 
+     background:#f6f8fa; 
+     margin:0; 
+     padding:0; 
+     display:flex; 
+     min-height:100vh; 
+     align-items:center; 
+     justify-content:center;
+     }
+.app { 
+    width:100%; 
+    max-width:900px; 
+    margin:24px; 
+}
+h1 { text-align:center;
+     margin-bottom:12px;
+     color: #06b6b4;
+
+     }
+.game { display:flex; gap:24px;
+     align-items:flex-start; 
+     justify-content:center; 
+    }
+.board { display:grid;
+     grid-template-columns: repeat(3, 90px); 
+     grid-gap:8px; padding:12px; 
+     background: #fff;
+     border-radius:8px;
+     box-shadow: 0 6px 18px rgba(15,23,42,0.06); 
+    }
+.square { width:90px;
+     height:90px; 
+     font-size:36px; 
+     font-weight:700; 
+     display:flex; 
+     align-items:center; 
+     justify-content:center; 
+     border:2px solid #e6e9ee; 
+     background:linear-gradient(180deg,#fff,#fbfdff); 
+     cursor:pointer; 
+     transition:transform .08s ease, background .08s ease; }
+.square:hover { 
+    transform: translateY(-4px); 
+}
+.square.disabled { 
+    cursor:default;
+     opacity:0.9; 
+     transform:none; 
+    }
+.sidebar { 
+    min-width:220px;
+ }
+.status { font-weight:700;
+     margin-bottom:8px; 
+     font-size:18px; }
+.flash-message { background: #111827; 
+    color: #f8fafc; 
+    padding:8px 10px; 
+    border-radius:8px; 
+    margin-bottom:8px; 
+    box-shadow: 0 6px 18px rgba(2,6,23,0.08); 
+    font-weight:700; }
+.timer { font-size:18px;
+     font-weight:600;
+      margin-bottom:8px; 
+      transition: color .2s ease; }
+.controls { display:flex; 
+    gap:8px; 
+    margin-bottom:12px; 
+    flex-wrap:wrap; }
+.controls button { 
+    padding:8px 12px;
+    border-radius:6px;
+    border:none;
+    background:#0ea5a4; 
+    color:white; 
+    cursor:pointer; 
+    font-weight:500; 
+    transition:background .2s ease; }
+.controls button:hover { 
+    background:#06b6b4; 
+}
+.controls button.active { 
+    background:#8b5cf6; 
+}
+.controls button:disabled { 
+    opacity:0.5; 
+    cursor:default; }
+.history { 
+    background:#fff; 
+    padding:10px; 
+    border-radius:8px; 
+    box-shadow: 0 6px 18px rgba(15,23,42,0.04); 
+    max-height:300px; 
+    overflow-y:auto; }
+.history ol { 
+    padding-left:16px; 
+    margin:0; }
+.history button { background:none; 
+    border:1px solid transparent; 
+    padding:6px 8px; border-radius:6px; 
+    cursor:pointer; font-size:14px; }
+.history button.current { background:#eef2ff; 
+    border-color:#290da9; 
+    font-weight:600; }
+.footer { text-align:center; 
+    margin-top:14px; 
+    color:#6b7280; }
 
 /* Mobile responsiveness */
 @media (max-width:640px) {

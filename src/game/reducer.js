@@ -17,14 +17,26 @@ export const initialState = {
   step: 0,
   xIsNext: true,
   winner: null,
-  isDraw: false
+  isDraw: false,
+  aiEnabled: false,
+  timePerPlayer: 10,
+  timeLeft: 10,
+  timerActive: false
+  ,
+  message: ''
 }
 
 export const ACTIONS = {
   MAKE_MOVE: 'MAKE_MOVE',
   RESET: 'RESET',
   UNDO: 'UNDO',
-  JUMP_TO: 'JUMP_TO'
+  JUMP_TO: 'JUMP_TO',
+  TOGGLE_AI: 'TOGGLE_AI',
+  TICK: 'TICK',
+  TIMEOUT: 'TIMEOUT',
+  START_TIMER: 'START_TIMER'
+  ,SHOW_MESSAGE: 'SHOW_MESSAGE',
+  CLEAR_MESSAGE: 'CLEAR_MESSAGE'
 }
 
 export function gameReducer(state, action) {
@@ -44,11 +56,14 @@ export function gameReducer(state, action) {
         step: history.length,
         xIsNext: !state.xIsNext,
         winner,
-        isDraw
+        isDraw,
+        timeLeft: state.timePerPlayer,
+        timerActive: !winner && !isDraw
+        ,message: ''
       }
     }
     case ACTIONS.RESET:
-      return { ...initialState }
+      return { ...initialState, aiEnabled: state.aiEnabled, message: '' }
     case ACTIONS.UNDO: {
       if (state.step === 0) return state
       const step = state.step - 1
@@ -60,7 +75,10 @@ export function gameReducer(state, action) {
         step,
         xIsNext: (step % 2) === 0,
         winner,
-        isDraw
+        isDraw,
+        timeLeft: state.timePerPlayer,
+        timerActive: !winner && !isDraw
+        ,message: ''
       }
     }
     case ACTIONS.JUMP_TO: {
@@ -73,9 +91,51 @@ export function gameReducer(state, action) {
         step,
         xIsNext: (step % 2) === 0,
         winner,
-        isDraw
+        isDraw,
+        timeLeft: state.timePerPlayer,
+        timerActive: !winner && !isDraw
+        ,message: ''
       }
     }
+    case ACTIONS.TOGGLE_AI:
+      return {
+        ...state,
+        aiEnabled: !state.aiEnabled,
+        history: [Array(9).fill(null)],
+        step: 0,
+        xIsNext: true,
+        winner: null,
+        isDraw: false,
+        timeLeft: state.timePerPlayer,
+        timerActive: !state.aiEnabled
+      }
+    case ACTIONS.TICK:
+      if (state.timeLeft <= 1) {
+        return { ...state, timerActive: false, timeLeft: 0 }
+      }
+      return { ...state, timeLeft: state.timeLeft - 1 }
+    case ACTIONS.TIMEOUT: {
+      // When a player times out, switch the turn to the opponent
+      // instead of immediately declaring a loss. Reset the timer
+      // so the opponent can play. Also show a brief message.
+      if (state.winner || state.isDraw) return state
+      const nextPlayerIsX = !state.xIsNext
+      const timedOut = state.xIsNext ? 'X' : 'O'
+      const next = nextPlayerIsX ? 'X' : 'O'
+      return {
+        ...state,
+        xIsNext: nextPlayerIsX,
+        timeLeft: state.timePerPlayer,
+        timerActive: true,
+        message: `Time's up for ${timedOut} — turn passed to ${next}`
+      }
+    }
+    case ACTIONS.START_TIMER:
+      return { ...state, timerActive: true, timeLeft: state.timePerPlayer }
+    case ACTIONS.SHOW_MESSAGE:
+      return { ...state, message: action.payload?.message || '' }
+    case ACTIONS.CLEAR_MESSAGE:
+      return { ...state, message: '' }
     default:
       return state
   }
